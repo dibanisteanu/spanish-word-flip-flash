@@ -4,7 +4,8 @@ pipeline {
   }
   agent {
     docker {
-      image 'node:22-alpine'
+      //image 'node:22-alpine'
+      image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
     }
   }
 
@@ -35,12 +36,14 @@ pipeline {
     }
 
     stage('e2e') {
+        /*
         agent {
             docker {
                 image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
                 reuseNode true
             }
         }
+        */
 
         environment {
             CI_ENVIRONMENT_URL_X = 'PUT YOUR NETLIFY SITE URL HERE'
