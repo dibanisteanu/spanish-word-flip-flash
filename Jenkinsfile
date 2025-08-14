@@ -9,7 +9,6 @@ pipeline {
   }
 
   environment {
-    E2E_BASE_URL = 'http://localhost:8080'
     VITE_FF_DISABLE_BUGS = 'true'
   }
 
@@ -34,6 +33,24 @@ pipeline {
         echo 'Mock deployment was successful!'
       }
     }
+
+    stage('e2e') {
+        agent {
+            docker {
+                image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                reuseNode true
+            }
+        }
+
+        environment {
+            CI_ENVIRONMENT_URL_X = 'PUT YOUR NETLIFY SITE URL HERE'
+        }
+
+        steps {
+            sh '''
+                npx playwright test
+            '''
+        }    
   }
 }
 
