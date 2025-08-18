@@ -1,6 +1,5 @@
 
 import { useMemo, useState } from "react";
-import { bugsEnabled } from "@/lib/featureFlags";
 import { FlashCard } from "@/components/FlashCard";
 import { WordPair, spanishWords } from "@/data/spanishWords";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,7 @@ export function FlashCardDeck() {
   const totalCards = spanishWords.length;
 
   // Decide once per mount whether to hide the Random button (33% chance)
-  const hideRandomButton = useMemo(() => bugsEnabled() && Math.random() < 0.33, []);
+  const hideRandomButton = useMemo(() => Math.random() < 0.33, []);
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) => 

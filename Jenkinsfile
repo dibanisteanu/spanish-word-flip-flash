@@ -1,34 +1,56 @@
 pipeline {
-  options {
-    ansiColor('xterm')
-  }
-  agent {
-    docker {
-      //image 'node:22-alpine'
-      image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+    options {
+        ansiColor('xterm')
     }
-  }
-
-  environment {
-    VITE_FF_DISABLE_BUGS = 'true'
-  }
 
   stages {
     stage('build') {
-      steps {
-        sh 'npm ci'
-        sh 'npm run build'
-      }
+        agent {
+            docker {
+                image 'node:22-alpine'
+            }
+        }        
+        steps {
+            sh 'npm ci'
+            sh 'npm run build'
+        }
+    }
+    parallel {
+        stage('unit tests') {
+            agent {
+                docker {
+                    image 'node:22-alpine'
+                    reuseNode true
+                }
+            }        
+            steps {
+                // Unit tests with Vitest
+                sh 'npx vitest run --reporter=verbose'
+            }
+        }
+        stage('integration tests') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    npx playwright test
+                '''
+            } 
+        }         
     }
 
-    stage('test') {
-      steps {
-        // Unit tests with Vitest
-        sh 'npx vitest run --reporter=verbose'
-      }
-    }
 
     stage('deploy') {
+        agent {
+            docker {
+                image 'alpine'
+            }
+        }        
       steps {
         // Mock deployment which does nothing
         echo 'Mock deployment was successful!'
@@ -36,17 +58,15 @@ pipeline {
     }
 
     stage('e2e') {
-        /*
         agent {
             docker {
                 image 'mcr.microsoft.com/playwright:v1.54.2-jammy'
                 reuseNode true
             }
         }
-        */
 
         environment {
-            CI_ENVIRONMENT_URL_X = 'PUT YOUR NETLIFY SITE URL HERE'
+            CI_ENVIRONMENT_URL = 'https://spanish-cards.netlify.app/'
         }
 
         steps {
@@ -61,7 +81,7 @@ pipeline {
                 junit stdioRetention: 'ALL', testResults: 'reports-e2e/junit.xml'
             }
         } 
-    }   
+    } 
   }
 }
 

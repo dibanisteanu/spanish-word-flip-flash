@@ -24,15 +24,6 @@ A small React + Vite app that helps you learn essential Spanish words with flip 
    ```
    - Default dev URL: http://localhost:8080
 
-## Feature Flags
-- Bugs feature flag: enabled by default (random error and optionally hidden Random Card button when enabled in code).
-- Disable bugs explicitly in the browser build by setting:
-  - `VITE_FF_DISABLE_BUGS=true`
-
-Example:
-```bash
-VITE_FF_DISABLE_BUGS=true npm run dev
-```
 
 ## Scripts
 - Dev server: `npm run dev`
@@ -61,11 +52,11 @@ Common commands:
 npm run test:e2e
 
 # Only Chromium, headed (browser visible)
-VITE_FF_DISABLE_BUGS=true E2E_BASE_URL=http://localhost:8080 \
+E2E_BASE_URL=http://localhost:8080 \
   npm run test:e2e -- --project=chromium --headed
 
 # Slow motion (set once via env)
-SLOW_MO=400 VITE_FF_DISABLE_BUGS=true E2E_BASE_URL=http://localhost:8080 \
+SLOW_MO=400 E2E_BASE_URL=http://localhost:8080 \
   npm run test:e2e -- --project=chromium --headed
 
 # Open the last HTML report
@@ -96,7 +87,6 @@ A `Jenkinsfile` is included with three stages using a Dockerized Node agent.
 
 Environment variables for Jenkins:
 - `E2E_BASE_URL=http://localhost:8080`
-- `VITE_FF_DISABLE_BUGS=true`
 
 Note: If you wish to run E2E in Jenkins, add steps to install Playwright browsers and run `npm run test:e2e -- --project=chromium`, then archive `reports-e2e/**` and publish JUnit from `reports-e2e/junit.xml`.
 
@@ -109,7 +99,6 @@ Outputs to `dist/`.
 ## Troubleshooting
 - Port 8080 in use: kill existing dev server, e.g. `npx kill-port 8080`.
 - Playwright slow-mo: set `SLOW_MO=400` (ms) env var.
-- Disable bugs for stable runs: set `VITE_FF_DISABLE_BUGS=true`.
 
 ## License
 MIT
