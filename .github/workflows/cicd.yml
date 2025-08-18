@@ -52,9 +52,6 @@ jobs:
     needs: build
     container:
       image: mcr.microsoft.com/playwright:v1.54.2-jammy
-      options: --user 1001
-    env:
-      HOME: /home/pwuser # Ensure Firefox can create a profile
     steps:
       - uses: actions/checkout@v4
       - name: Use npm cache
@@ -86,9 +83,7 @@ jobs:
     needs: deploy
     container:
       image: mcr.microsoft.com/playwright:v1.54.2-jammy
-      options: --user 1001
     env:
-      HOME: /home/pwuser # Ensure Firefox can create a profile      
       E2E_BASE_URL: https://spanish-cards.netlify.app/
     steps:
       - uses: actions/checkout@v4
