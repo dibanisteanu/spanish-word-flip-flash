@@ -105,7 +105,6 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.54.2-jammy
     env:
       HOME: /root # For Firefox      
-    env:
       E2E_BASE_URL: https://spanish-cards.netlify.app/
     steps:
       - uses: actions/checkout@v4
